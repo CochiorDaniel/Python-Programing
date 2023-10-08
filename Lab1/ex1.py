@@ -1,4 +1,6 @@
 import math
+
+
 def gcd(n):
     numbers = []
 
@@ -14,6 +16,5 @@ def gcd(n):
 
     print(rezultat)
 
+
 gcd(4)
-
-
