@@ -7,7 +7,7 @@ def under_diagonal_0(matrix):
 
     for i in range (0,linii):
         for j in range(0,coloane):
-            if(j == i-1):
+            if(j < i):
                 matrix[i][j] = 0
 
     return matrix

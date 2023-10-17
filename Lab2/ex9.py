@@ -8,9 +8,9 @@ def who_is_blind(matrix):
             for k in range(i, linii):
                 if matrix[k][j] < matrix[i][j]:
                     tuplu = (k, j)
-                    lista.append(tuplu)
-
-    return set(lista)
+                    if lista.count(tuplu) < 1:
+                        lista.append(tuplu)
+    return lista
 
 
 print(who_is_blind([[1, 2, 3, 2, 1, 1],
