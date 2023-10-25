@@ -6,6 +6,7 @@ def tpl(l):
     duplicate = len(l) - len(s)
     unice = len(s)
 
-    return (unice,duplicate)
+    return (unice, duplicate)
+
 
 print(tpl([1, 1, 2, 2, 3, 4, 5, 5, 6]))

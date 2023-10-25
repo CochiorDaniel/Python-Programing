@@ -1,7 +1,7 @@
 def aparitii_dict(str):
     x = dict()
     for ch in str:
-        if ch not in x.keys() :
+        if ch not in x.keys():
             x[ch] = 1
         else:
             x[ch] += 1

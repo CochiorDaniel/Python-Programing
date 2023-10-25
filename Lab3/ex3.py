@@ -7,26 +7,17 @@ def dict_compare(dict1, dict2):
                 return False
         return True
     else:
-        if isinstance(dict1, (int, float)) and isinstance(dict2, (int, float)):
-            return dict1 == dict2
-        else:
-            if len(dict1) != len(dict2):
-                return False
-            else:
-                for i in range(len(dict1)):
-                    if dict1[i] != dict2[i]:
-                        return False
-            return True
+        return dict1 == dict2
 
 
 dict1 = {
-    "k1": {"subkey1": 420, "subkey2": [1, 2, 3, 9]},
+    "k1": {"s1": 420, "s2": [1, 2, 3, 9, "Ana", 3]},
     "k2": "v"
 }
 
 dict2 = {
     "k2": "v",
-    "k1": {"subkey1": 420, "subkey2": [1, 2, 3, 9]}
+    "k1": {"s1": 420, "s2": [1, 2, 3, 9, "Ana", 3]}
 }
 
 print(dict_compare(dict1, dict2))
