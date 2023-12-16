@@ -11,15 +11,15 @@ def main():
     message = "lololo"
     while True:
         # print(message)
+        if "Game ended" in message:
+            break
         if "Congratulations! You guessed the number!" in message:
             # print("Am intrat")
             # client_socket.send("ceva".encode("utf-8"))
-            message = client_socket.recv(1024).decode("utf-8")
-            print(message)
+            # message = client_socket.recv(1024).decode("utf-8")
+            # print(message)
             number = input("Enter a number between 0 and 50: ")
             client_socket.send(bytes(number, "utf-8"))
-        # if "" in message:
-        #     break
 
         message = client_socket.recv(1024).decode("utf-8")
         print(message)

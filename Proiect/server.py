@@ -28,6 +28,22 @@ def sent_to_all(message):
         print(f"Error handling client {client_socket}: {e}")
 
 
+def sent_to_client1(message):
+    global sent_to
+    try:
+        sent_to[0].send(bytes(message, "utf-8"))
+    except Exception as e:
+        print(f"Error handling client {sent_to[0]}: {e}")
+
+
+def sent_to_client2(message):
+    global sent_to
+    try:
+        sent_to[1].send(bytes(message, "utf-8"))
+    except Exception as e:
+        print(f"Error handling client {sent_to[1]}: {e}")
+
+
 def disconnect_all():
     global sent_to
     try:
@@ -67,7 +83,7 @@ def handle_client2(client_socket, client_address):
                 message = "Congratulations! You guessed the number!"
                 score += 1
                 # client_socket.send(bytes(message, "utf-8"))
-                sent_to_all(message)
+                sent_to_client2(message)
                 break
             elif int(guess) < generated_number:
                 message = "The number is greater than your guess!"
@@ -77,6 +93,7 @@ def handle_client2(client_socket, client_address):
             sent_to_all(message)
             score += 1
         maximum_score = min(maximum_score, score)
+        # sent_to_all(message)
         m1 = f"Your score is {score}. The maximum score is {maximum_score}."
         # client_socket.send(bytes(f"Your score is {score}.", "utf-8"))
         # client_socket.send(bytes(f"The maximum score is {maximum_score}.", "utf-8"))
@@ -86,6 +103,7 @@ def handle_client2(client_socket, client_address):
         print(f"Received message: {mesg}")
         if mesg == "y":
             print("New game started!")
+            sent_to_client1(message)
             score = 0
             if len(sent_to) == 2:
                 print("Apelez handle_client1")
@@ -98,7 +116,9 @@ def handle_client2(client_socket, client_address):
             handle_client2(client_socket, client_address)
         else:
             print("Game ended!")
-            client_socket.send(bytes(f"The maximum score is {maximum_score}.", "utf-8"))
+            m2 = f"Game ended! The maximum score is {maximum_score}."
+            #client_socket.send(bytes(f"Game ended! The maximum score is {maximum_score}.", "utf-8"))
+            sent_to_all(m2)
             disconnect_all()
             sent_to.clear()
     except Exception as e:
