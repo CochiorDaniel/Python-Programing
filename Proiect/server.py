@@ -19,6 +19,16 @@ def generate_random_number():
         generated_number = random.randint(0, 50)
 
 
+def validate_number(number):
+    try:
+        number = int(number)
+        if number < 0 or number > 50:
+            return False
+        return True
+    except Exception as e:
+        return False
+
+
 def sent_to_all(message):
     global sent_to
     try:
@@ -60,6 +70,10 @@ def handle_client1(client_socket):
         # message = "Enter a number between 0 and 50: "
         # client_socket.send(bytes(message, "utf-8"))
         number = client_socket.recv(1024).decode("utf-8")
+        while not validate_number(number):
+            message = "Invalid number!"
+            client_socket.send(bytes(message, "utf-8"))
+            number = client_socket.recv(1024).decode("utf-8")
         print(f"Received message: {number}")
         with lock:
             generated_number = int(number)
@@ -77,6 +91,10 @@ def handle_client2(client_socket, client_address):
     try:
         while True:
             guess = client_socket.recv(1024).decode("utf-8")
+            while not validate_number(guess):
+                message = "Invalid number!"
+                client_socket.send(bytes(message, "utf-8"))
+                guess = client_socket.recv(1024).decode("utf-8")
             print(f"Received guess: {guess}")
 
             if int(guess) == generated_number:
@@ -121,6 +139,8 @@ def handle_client2(client_socket, client_address):
             sent_to_all(m2)
             disconnect_all()
             sent_to.clear()
+            score = 0
+            maximum_score = 9999
     except Exception as e:
         print(f"Error handling client {client_socket}: {e}")
 
