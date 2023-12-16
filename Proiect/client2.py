@@ -8,15 +8,20 @@ def main():
     client_socket.send(b"guess_number")
     message = "lololo"
     while True:
-        if message == "Congratulations! You guessed the number!":
+        if "Congratulations! You guessed the number!" in message:
             guess = "ceva"
             client_socket.send(bytes(guess, "utf-8"))
+            message = client_socket.recv(1024).decode("utf-8")
+            print(message)
             guess = input("Do you want another game? y/n: ")
             client_socket.send(bytes(guess, "utf-8"))
             if guess == "n":
                 message = client_socket.recv(1024).decode("utf-8")
                 print(message)
                 break
+            else:
+                guess = input("Enter your guess: ")
+                client_socket.send(bytes(guess, "utf-8"))
         else:
             guess = input("Enter your guess: ")
             client_socket.send(bytes(guess, "utf-8"))
