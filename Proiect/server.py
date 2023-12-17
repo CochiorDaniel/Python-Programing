@@ -10,7 +10,6 @@ lock = threading.Lock()
 score = 0
 maximum_score = 9999
 sent_to = []
-asteapta_numarul = threading.Event()
 
 
 def generate_random_number():
@@ -31,9 +30,11 @@ def validate_number(number):
 
 def sent_to_all(message):
     global sent_to
+    client_socket = None
     try:
-        for client_socket in sent_to:
-            client_socket.send(bytes(message, "utf-8"))
+        for c in sent_to:
+            client_socket = c
+            c.send(bytes(message, "utf-8"))
     except Exception as e:
         print(f"Error handling client {client_socket}: {e}")
 
@@ -56,19 +57,18 @@ def sent_to_client2(message):
 
 def disconnect_all():
     global sent_to
+    client_socket = None
     try:
-        for client_socket in sent_to:
-            client_socket.close()
+        for c in sent_to:
+            client_socket = c
+            c.close()
     except Exception as e:
         print(f"Error handling client {client_socket}: {e}")
 
 
 def handle_client1(client_socket):
     global generated_number
-    print("Apelu e bun")
     try:
-        # message = "Enter a number between 0 and 50: "
-        # client_socket.send(bytes(message, "utf-8"))
         number = client_socket.recv(1024).decode("utf-8")
         while not validate_number(number):
             message = "Invalid number!"
@@ -77,8 +77,7 @@ def handle_client1(client_socket):
         print(f"Received message: {number}")
         with lock:
             generated_number = int(number)
-        print(f"Generated number: {generated_number}")
-        # asteapta_numarul.set()
+        #print(f"Generated number: {generated_number}")
     except Exception as e:
         print(f"Error handling client {client_socket}: {e}")
 
@@ -101,7 +100,10 @@ def handle_client2(client_socket, client_address):
                 message = "Congratulations! You guessed the number!"
                 score += 1
                 # client_socket.send(bytes(message, "utf-8"))
-                sent_to_client2(message)
+                if len(sent_to) == 2:
+                    sent_to_client2(message)
+                else:
+                    sent_to_client1(message)
                 break
             elif int(guess) < generated_number:
                 message = "The number is greater than your guess!"
@@ -121,12 +123,14 @@ def handle_client2(client_socket, client_address):
         print(f"Received message: {mesg}")
         if mesg == "y":
             print("New game started!")
-            sent_to_client1(message)
+            # sent_to_client1(message)
             score = 0
             if len(sent_to) == 2:
+                sent_to_client1(message)
                 print("Apelez handle_client1")
                 handle_client1(sent_to[0])
             else:
+                print("Apelez generate_random_number pt client2")
                 generate_random_number()
             print(f"Generated number: {generated_number}")
             # asteapta_numarul.wait()
