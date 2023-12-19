@@ -99,7 +99,6 @@ def handle_client2(client_socket, client_address):
             if int(guess) == generated_number:
                 message = "Congratulations! You guessed the number!"
                 score += 1
-                # client_socket.send(bytes(message, "utf-8"))
                 if len(sent_to) == 2:
                     sent_to_client2(message)
                 else:
@@ -109,21 +108,17 @@ def handle_client2(client_socket, client_address):
                 message = "The number is greater than your guess!"
             else:
                 message = "The number is smaller than your guess!"
-            # client_socket.send(bytes(message, "utf-8"))
             sent_to_all(message)
             score += 1
         maximum_score = min(maximum_score, score)
         # sent_to_all(message)
         m1 = f"Your score is {score}. The maximum score is {maximum_score}."
-        # client_socket.send(bytes(f"Your score is {score}.", "utf-8"))
-        # client_socket.send(bytes(f"The maximum score is {maximum_score}.", "utf-8"))
         sent_to_all(m1)
         mesg = client_socket.recv(1024).decode("utf-8")
         mesg = client_socket.recv(1024).decode("utf-8")
         print(f"Received message: {mesg}")
         if mesg == "y":
             print("New game started!")
-            # sent_to_client1(message)
             score = 0
             if len(sent_to) == 2:
                 sent_to_client1(message)
@@ -133,13 +128,10 @@ def handle_client2(client_socket, client_address):
                 print("Apelez generate_random_number pt client2")
                 generate_random_number()
             print(f"Generated number: {generated_number}")
-            # asteapta_numarul.wait()
-            # asteapta_numarul.clear()
             handle_client2(client_socket, client_address)
         else:
             print("Game ended!")
             m2 = f"Game ended! The maximum score is {maximum_score}."
-            #client_socket.send(bytes(f"Game ended! The maximum score is {maximum_score}.", "utf-8"))
             sent_to_all(m2)
             disconnect_all()
             sent_to.clear()
@@ -165,7 +157,7 @@ def handle_client(client_socket, client_address, client_type):
 def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
-    server_socket.listen(5)
+    server_socket.listen(2)
     print("Server listening for connections...")
     while True:
         client_socket, client_address = server_socket.accept()

@@ -14,6 +14,8 @@ def main():
             message = client_socket.recv(1024).decode("utf-8")
             print(message)
             guess = input("Do you want another game? y/n: ")
+            while guess != "y" and guess != "n":
+                guess = input("Do you want another game? y/n: ")
             client_socket.send(bytes(guess, "utf-8"))
             if guess == "n":
                 message = client_socket.recv(1024).decode("utf-8")
@@ -34,4 +36,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
